@@ -1,4 +1,4 @@
-import {IMAGE_ASSETS} from '../../configs/images/image_assets';
+import {IMAGE_ASSETS} from '../../configs/image_assets';
 import {TypedScene} from './utils/TypedScene';
 
 export class Preloader extends TypedScene {

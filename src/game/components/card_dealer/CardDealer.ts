@@ -39,6 +39,7 @@ export class CardDealer {
     }
   }
 
+  // паттерн «свойство-метод»
   public onAllCardsRevealed: (...args: any) => void = () => null;
 
   public createCards() {

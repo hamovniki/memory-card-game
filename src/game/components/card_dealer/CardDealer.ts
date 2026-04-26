@@ -40,7 +40,7 @@ export class CardDealer {
   }
 
   // паттерн «свойство-метод»
-  public onAllCardsRevealed: (...args: any) => void = () => null;
+  public onAllCardsRevealed: (...args: any) => void = () => {};
 
   public createCards() {
     const allCardsIds = Utils.Array.Shuffle([

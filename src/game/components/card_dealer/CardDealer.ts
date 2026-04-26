@@ -9,30 +9,37 @@ export class CardDealer {
   private _prevRevealedCard: Card | null = null;
   private _guessesParis = 0;
   private _possibleCardIds: Card['id'][] = ['1', '2', '3', '4', '5'];
+  private _processing = false;
 
   constructor(scene: TypedScene) {
     this._scene = scene;
   }
 
-  public revealCard(card: Card) {
-    if (card.isRevealed) {
-      return;
-    }
-    card.reveal();
+  public async revealCard(card: Card) {
+    if (card.isRevealed) return;
+    if (this._processing) return;
+    if (this._prevRevealedCard === card) return;
 
     if (!this._prevRevealedCard) {
+      card.reveal();
       this._prevRevealedCard = card;
       return;
     }
 
+    this._processing = true;
+
+    await card.reveal();
+
     if (this._prevRevealedCard.id === card.id) {
       this._guessesParis++;
+      this._prevRevealedCard = null;
+      this._processing = false;
     } else {
-      this._prevRevealedCard.hide();
-      card.hide();
+      await new Promise<void>((resolve) => setTimeout(resolve, 250));
+      await Promise.all([this._prevRevealedCard.hide(), card.hide()]);
+      this._prevRevealedCard = null;
+      this._processing = false;
     }
-
-    this._prevRevealedCard = null;
 
     if (this._guessesParis === this._possibleCardIds.length) {
       this.onAllCardsRevealed();

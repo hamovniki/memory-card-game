@@ -33,14 +33,14 @@ export class Card extends GameObjects.Sprite {
     return this._isRevealed;
   }
 
-  public reveal() {
+  public async reveal() {
+    await this.flip();
     this._isRevealed = true;
-    this.setTexture('card' + this.id);
   }
 
-  public hide() {
+  public async hide() {
+    await this.flip();
     this._isRevealed = false;
-    this.setTexture('card');
   }
 
   public flyIn(x: number, y: number) {
@@ -52,6 +52,32 @@ export class Card extends GameObjects.Sprite {
         y,
         duration: 200,
         onComplete: resolve,
+      });
+    });
+  }
+
+  public flip() {
+    return new Promise((resolve) => {
+      const show = () => {
+        const texture = this._isRevealed ? 'card' : 'card' + this.id;
+
+        this.setTexture(texture);
+
+        this.scene.tweens.add({
+          targets: this,
+          scaleX: 1,
+          ease: 'Linear',
+          duration: 200,
+          onComplete: resolve,
+        });
+      };
+
+      this.scene.tweens.add({
+        targets: this,
+        scaleX: 0,
+        ease: 'Linear',
+        duration: 200,
+        onComplete: show,
       });
     });
   }

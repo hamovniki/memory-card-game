@@ -6,15 +6,45 @@ import {Card, CardPosition} from '../card/Card';
 export class CardDealer {
   private _scene: TypedScene;
 
+  private _prevRevealedCard: Card | null = null;
+  private _guessesParis = 0;
+  private _possibleCardIds: Card['id'][] = ['1', '2', '3', '4', '5'];
+
   constructor(scene: TypedScene) {
     this._scene = scene;
   }
 
+  public revealCard(card: Card) {
+    if (card.isRevealed) {
+      return;
+    }
+    card.reveal();
+
+    if (!this._prevRevealedCard) {
+      this._prevRevealedCard = card;
+      return;
+    }
+
+    if (this._prevRevealedCard.id === card.id) {
+      this._guessesParis++;
+    } else {
+      this._prevRevealedCard.hide();
+      card.hide();
+    }
+
+    this._prevRevealedCard = null;
+
+    if (this._guessesParis === this._possibleCardIds.length) {
+      this.onAllCardsRevealed();
+    }
+  }
+
+  public onAllCardsRevealed: (...args: any) => void = () => null;
+
   public createCards() {
-    const possibleCardIds: Card['id'][] = ['1', '2', '3', '4', '5'];
     const allCardsIds = Utils.Array.Shuffle([
-      ...possibleCardIds,
-      ...possibleCardIds,
+      ...this._possibleCardIds,
+      ...this._possibleCardIds,
     ]);
 
     const cardPositions = this._getCardsPositions();

@@ -3,21 +3,29 @@ import {CardDealer} from '../components/card_dealer/CardDealer';
 import {TypedScene} from './utils/TypedScene';
 
 export class GameScene extends TypedScene {
+  private _cardDealer: CardDealer;
+
   constructor() {
     super('GameScene');
   }
 
   create() {
-    const cardDealer = new CardDealer(this);
-    cardDealer.createCards();
+    this._cardDealer = new CardDealer(this);
+    this._cardDealer.createCards();
+
+    this._initEvents();
+  }
+
+  private _onCardClick = (_pointer_: unknown, card: Card) => {
+    this._cardDealer.revealCard(card);
+  };
+
+  private _initEvents() {
+    this._cardDealer.onAllCardsRevealed = this._onAllCardsRevealed;
     this.input.on('gameobjectdown', this._onCardClick);
   }
 
-  private _onCardClick(_pointer_: unknown, object: Card) {
-    if (object.isRevealed) {
-      object.hide();
-    } else {
-      object.reveal();
-    }
-  }
+  private _onAllCardsRevealed = () => {
+    this.scene.restart();
+  };
 }

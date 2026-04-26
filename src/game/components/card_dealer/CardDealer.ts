@@ -42,19 +42,30 @@ export class CardDealer {
   // паттерн «свойство-метод»
   public onAllCardsRevealed: (...args: any) => void = () => {};
 
-  public createCards() {
+  public async createCards() {
     const allCardsIds = Utils.Array.Shuffle([
       ...this._possibleCardIds,
       ...this._possibleCardIds,
     ]);
 
     const cardPositions = this._getCardsPositions();
-
-    allCardsIds.forEach((cardId, index) => {
-      const {x, y} = cardPositions[index];
-
-      new Card(this._scene, {position: {x, y}, id: cardId});
+    const cardsIdWithPos = cardPositions.map((position, index) => {
+      const id = allCardsIds[index];
+      return {
+        ...position,
+        id,
+      };
     });
+    for (const cardIdWithPos of cardsIdWithPos) {
+      const {x, y, id} = cardIdWithPos;
+      const position: CardPosition = {
+        x: -200,
+        y: -200,
+      };
+      const card = new Card(this._scene, {position, id});
+
+      await card.flyIn(x, y);
+    }
   }
 
   private _getCardsPositions() {

@@ -42,4 +42,17 @@ export class Card extends GameObjects.Sprite {
     this._isRevealed = false;
     this.setTexture('card');
   }
+
+  public flyIn(x: number, y: number) {
+    return new Promise((resolve) => {
+      this.scene.tweens.add({
+        targets: this,
+        ease: 'Linear',
+        x,
+        y,
+        duration: 200,
+        onComplete: resolve,
+      });
+    });
+  }
 }

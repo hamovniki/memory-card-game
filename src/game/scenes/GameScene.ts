@@ -9,9 +9,9 @@ export class GameScene extends TypedScene {
     super('GameScene');
   }
 
-  create() {
+  async create() {
     this._cardDealer = new CardDealer(this);
-    this._cardDealer.createCards();
+    await this._cardDealer.createCards();
 
     this._initEvents();
   }

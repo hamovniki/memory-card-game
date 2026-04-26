@@ -5,4 +5,6 @@ export abstract class TypedScene extends Scene {
   constructor(key: SceneKeys) {
     super(key);
   }
+
+  abstract create(): void;
 }

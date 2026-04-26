@@ -4,4 +4,8 @@ export class GameScene extends TypedScene {
   constructor() {
     super('GameScene');
   }
+
+  create() {
+    console.log('GAME SCENE');
+  }
 }

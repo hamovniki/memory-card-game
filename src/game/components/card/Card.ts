@@ -57,6 +57,7 @@ export class Card extends GameObjects.Sprite {
   }
 
   public flyIn(x: number, y: number) {
+    this._scene.sound.play(AUDIO_KEYS.CARD_FLY_IN, {volume: 0.2});
     return new Promise((resolve) => {
       this.scene.tweens.add({
         targets: this,

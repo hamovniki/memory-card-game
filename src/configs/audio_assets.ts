@@ -3,6 +3,7 @@ export const AUDIO_KEYS = {
   MAIN_LOOP: 'fat-caps-audionatix',
   LOSE: 'lose',
   WIN: 'victory',
+  CARD_FLY_IN: 'whoosh',
 } as const;
 
 export const AUDIO_ASSETS = Object.values(AUDIO_KEYS).map((key) => {

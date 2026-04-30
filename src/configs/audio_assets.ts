@@ -1,5 +1,6 @@
 export const AUDIO_KEYS = {
-  CARD_FLIP: 'card-flip',
+  CARD_REVEAL: 'card-flip',
+  CARD_HIDE: 'card-slide',
   MAIN_LOOP: 'fat-caps-audionatix',
   LOSE: 'lose',
   WIN: 'victory',

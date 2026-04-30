@@ -46,12 +46,13 @@ export class Card extends GameObjects.Sprite {
   }
 
   public async reveal() {
-    this._scene.sound.play(AUDIO_KEYS.CARD_FLIP, {volume: 0.25});
+    this._scene.sound.play(AUDIO_KEYS.CARD_REVEAL, {volume: 0.25});
     await this.flip();
     this._isRevealed = true;
   }
 
   public async hide() {
+    this._scene.sound.play(AUDIO_KEYS.CARD_HIDE, {volume: 0.5});
     await this.flip();
     this._isRevealed = false;
   }

@@ -58,7 +58,7 @@ export class Card extends GameObjects.Sprite {
         ease: 'Linear',
         x,
         y,
-        duration: 200,
+        duration: 100,
         onComplete: resolve,
       });
     });

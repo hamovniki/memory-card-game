@@ -10,8 +10,6 @@ export class CardDealer {
   private _possibleCardIds: Card['id'][] = ['1', '2', '3', '4', '5'];
   private _processing = false;
   private _currentScale = 1;
-  private _currentCols = 5;
-  private _currentRows = 2;
 
   constructor(scene: TypedScene) {
     this._scene = scene;
@@ -57,10 +55,8 @@ export class CardDealer {
       ...this._possibleCardIds,
     ]);
 
-    const {positions, scale, cols, rows} = this._getGridParameters();
+    const {positions, scale} = this._getGridParameters();
     this._currentScale = scale;
-    this._currentCols = cols;
-    this._currentRows = rows;
 
     const cardsIdWithPos = positions.map((position, index) => ({
       ...position,
@@ -71,21 +67,19 @@ export class CardDealer {
       const {x, y, id} = cardIdWithPos;
       const startPos: CardPosition = {x: -200, y: -200};
       const card = new Card(this._scene, {position: startPos, id});
-      card.setScale(scale);
+      card.setScale(this._currentScale);
       await card.flyIn(x, y);
       this._cards.push(card);
     }
   }
 
   public async repositionCards() {
-    const {positions, scale, cols, rows} = this._getGridParameters();
+    const {positions, scale} = this._getGridParameters();
     this._currentScale = scale;
-    this._currentCols = cols;
-    this._currentRows = rows;
 
     for (let i = 0; i < this._cards.length; i++) {
       const card = this._cards[i];
-      card.setScale(scale);
+      card.setScale(this._currentScale);
       await card.moveTo(positions[i].x, positions[i].y);
     }
   }
@@ -131,6 +125,6 @@ export class CardDealer {
       }
     }
 
-    return {positions, scale, cols, rows};
+    return {positions, scale};
   }
 }

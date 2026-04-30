@@ -1,4 +1,4 @@
-import {AUDIO_ASSETS} from '../../configs/audio_assets';
+import {AUDIO_ASSETS, AUDIO_KEYS} from '../../configs/audio_assets';
 import {IMAGE_ASSETS} from '../../configs/image_assets';
 import {TypedScene} from './utils/TypedScene';
 
@@ -45,5 +45,6 @@ export class Preloader extends TypedScene {
 
   create() {
     this.scene.start('GameScene', {isRestart: true});
+    this.sound.play(AUDIO_KEYS.MAIN_LOOP, {volume: 0.1, loop: true});
   }
 }

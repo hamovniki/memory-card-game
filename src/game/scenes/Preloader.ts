@@ -23,6 +23,6 @@ export class Preloader extends TypedScene {
   }
 
   create() {
-    this.scene.start('GameScene');
+    this.scene.start('GameScene', {isRestart: true});
   }
 }

@@ -6,5 +6,5 @@ export abstract class TypedScene extends Scene {
     super(key);
   }
 
-  abstract create(): void;
+  abstract create(props: unknown): void;
 }

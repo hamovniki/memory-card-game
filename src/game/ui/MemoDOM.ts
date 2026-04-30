@@ -38,7 +38,7 @@ export class MemoDOM {
     `;
 
   private _restartTemplate = (isWin?: boolean) => /*html*/ `
-    <div class='menu'>
+    <div class='menu' style="background-color: ${isWin ? 'green' : 'red'}">
         <span>${isWin ? 'ПОБЕДА' : 'ПОРАЖЕНИЕ'}</span>
         <button>НАЧАТЬ ЗАНОВО</button>
     </div>

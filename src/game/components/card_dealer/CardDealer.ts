@@ -99,7 +99,7 @@ export class CardDealer {
     const cardMargin = 4;
 
     const availableWidth = width - horizontalPadding * 2;
-    const availableHeight = height - verticalPadding * 2;
+    const availableHeight = height - verticalPadding * 6;
 
     const neededCardWidth = (availableWidth - (cols - 1) * cardMargin) / cols;
     const neededCardHeight = (availableHeight - (rows - 1) * cardMargin) / rows;

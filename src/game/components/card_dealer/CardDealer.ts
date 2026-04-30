@@ -1,24 +1,25 @@
 import {Utils} from 'phaser';
-import {GAME_CONFIG} from '../../../configs/game_config';
 import {TypedScene} from '../../scenes/utils/TypedScene';
 import {Card, CardPosition} from '../card/Card';
 
 export class CardDealer {
   private _scene: TypedScene;
-
+  private _cards: Card[] = [];
   private _prevRevealedCard: Card | null = null;
   private _guessesParis = 0;
   private _possibleCardIds: Card['id'][] = ['1', '2', '3', '4', '5'];
   private _processing = false;
+  private _currentScale = 1;
+  private _currentCols = 5;
+  private _currentRows = 2;
 
   constructor(scene: TypedScene) {
     this._scene = scene;
   }
 
   public async revealCard(card: Card) {
-    if (card.isRevealed) return;
-    if (this._processing) return;
-    if (this._prevRevealedCard === card) return;
+    if (card.isRevealed || this._processing || this._prevRevealedCard === card)
+      return;
 
     if (!this._prevRevealedCard) {
       card.reveal();
@@ -27,7 +28,6 @@ export class CardDealer {
     }
 
     this._processing = true;
-
     await card.reveal();
 
     if (this._prevRevealedCard.id === card.id) {
@@ -46,62 +46,91 @@ export class CardDealer {
     }
   }
 
-  // паттерн «свойство-метод»
-  public onAllCardsRevealed: (...args: any) => void = () => {};
+  public onAllCardsRevealed: () => void = () => {};
 
   public async createCards() {
+    this._cards.forEach((card) => card.destroy());
+    this._cards = [];
+
     const allCardsIds = Utils.Array.Shuffle([
       ...this._possibleCardIds,
       ...this._possibleCardIds,
     ]);
 
-    const cardPositions = this._getCardsPositions();
-    const cardsIdWithPos = cardPositions.map((position, index) => {
-      const id = allCardsIds[index];
-      return {
-        ...position,
-        id,
-      };
-    });
+    const {positions, scale, cols, rows} = this._getGridParameters();
+    this._currentScale = scale;
+    this._currentCols = cols;
+    this._currentRows = rows;
+
+    const cardsIdWithPos = positions.map((position, index) => ({
+      ...position,
+      id: allCardsIds[index],
+    }));
+
     for (const cardIdWithPos of cardsIdWithPos) {
       const {x, y, id} = cardIdWithPos;
-      const position: CardPosition = {
-        x: -200,
-        y: -200,
-      };
-      const card = new Card(this._scene, {position, id});
-
+      const startPos: CardPosition = {x: -200, y: -200};
+      const card = new Card(this._scene, {position: startPos, id});
+      card.setScale(scale);
       await card.flyIn(x, y);
+      this._cards.push(card);
     }
   }
 
-  private _getCardsPositions() {
-    const cardsPositions: CardPosition[] = [];
+  public async repositionCards() {
+    const {positions, scale, cols, rows} = this._getGridParameters();
+    this._currentScale = scale;
+    this._currentCols = cols;
+    this._currentRows = rows;
 
-    const sceenWidth = GAME_CONFIG.width;
-    const sceenHeight = GAME_CONFIG.height;
+    for (let i = 0; i < this._cards.length; i++) {
+      const card = this._cards[i];
+      card.setScale(scale);
+      await card.moveTo(positions[i].x, positions[i].y);
+    }
+  }
 
-    const cardTexture = this._scene.textures.get('card').getSourceImage();
+  private _getGridParameters() {
+    const {width, height} = this._scene.cameras.main;
+    const originalTexture = this._scene.textures.get('card').getSourceImage();
+    const originalCardWidth = originalTexture.width;
+    const originalCardHeight = originalTexture.height;
 
-    const cardWidth = cardTexture.width;
-    const cardHeight = cardTexture.height;
+    const isPortrait = width < height;
+    const cols = isPortrait ? 2 : 5;
+    const rows = isPortrait ? 5 : 2;
 
+    const horizontalPadding = 16;
+    const verticalPadding = 16;
     const cardMargin = 4;
 
-    const cols = 5;
-    const rows = 2;
+    const availableWidth = width - horizontalPadding * 2;
+    const availableHeight = height - verticalPadding * 2;
 
-    const marginLeft = (sceenWidth - cardWidth * cols) / 2 + cardWidth / 2;
-    const marginTop = (sceenHeight - cardHeight * rows) / 2 + cardHeight / 2;
+    const neededCardWidth = (availableWidth - (cols - 1) * cardMargin) / cols;
+    const neededCardHeight = (availableHeight - (rows - 1) * cardMargin) / rows;
 
+    const scaleX = neededCardWidth / originalCardWidth;
+    const scaleY = neededCardHeight / originalCardHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    const cardWidth = originalCardWidth * scale;
+    const cardHeight = originalCardHeight * scale;
+
+    const totalGridWidth = cols * cardWidth + (cols - 1) * cardMargin;
+    const totalGridHeight = rows * cardHeight + (rows - 1) * cardMargin;
+    const startX = (width - totalGridWidth) / 2 + cardWidth / 2;
+    const startY = (height - totalGridHeight) / 2 + cardHeight / 2;
+
+    const positions: CardPosition[] = [];
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
-        const x = marginLeft + col * (cardWidth + cardMargin);
-        const y = marginTop + row * (cardHeight + cardMargin);
-        cardsPositions.push({x, y});
+        const x = startX + col * (cardWidth + cardMargin);
+        const y = startY + row * (cardHeight + cardMargin);
+        positions.push({x, y});
       }
     }
 
-    return cardsPositions;
+    return {positions, scale, cols, rows};
   }
 }

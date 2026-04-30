@@ -1,1 +1,1 @@
-export type SceneKeys = 'Preloader' | 'GameScene';
+export type SceneKeys = 'Boot' | 'Preloader' | 'GameScene';

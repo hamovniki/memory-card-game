@@ -32,6 +32,8 @@ export class GameScene extends TypedScene {
     isRestart ? this._onStartGame() : this._menuDOM.render({type: 'start'});
 
     this._initEvents();
+
+    this.scale.on('resize', this._onResize, this);
   }
 
   private _onCardClick = (_pointer_: unknown, card: Card) => {
@@ -46,5 +48,11 @@ export class GameScene extends TypedScene {
 
   private _onAllCardsRevealed = () => {
     this._menuDOM.render({type: 'end', isWin: true});
+  };
+
+  private _onResize = () => {
+    if (this._cardDealer) {
+      this._cardDealer.repositionCards();
+    }
   };
 }

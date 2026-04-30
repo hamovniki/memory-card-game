@@ -7,11 +7,28 @@ export class Preloader extends TypedScene {
   }
 
   init() {
-    this.add.image(512, 384, 'background');
-    this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
-    const bar = this.add.rectangle(512 - 230, 384, 4, 28, 0xffffff);
+    const {width, height} = this.cameras.main;
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    const bg = this.add.image(centerX, centerY, 'bg');
+    bg.setDisplaySize(width, height);
+
+    const barWidth = 468;
+    const barHeight = 32;
+    this.add
+      .rectangle(centerX, centerY, barWidth, barHeight)
+      .setStrokeStyle(1, 0xffffff);
+
+    const bar = this.add.rectangle(
+      centerX - barWidth / 2,
+      centerY,
+      4,
+      barHeight - 4,
+      0xffffff,
+    );
     this.load.on('progress', (progress: number) => {
-      bar.width = 4 + 460 * progress;
+      bar.width = 4 + (barWidth - 8) * progress;
     });
   }
 

@@ -15,22 +15,30 @@ interface CardProps {
 
 export class Card extends GameObjects.Sprite {
   public readonly id: CardId;
-
   private _isRevealed: boolean = false;
 
   constructor(scene: TypedScene, props: CardProps) {
     const {id, position} = props;
     super(scene, position.x, position.y, 'card');
-
     this.id = id;
-
     scene.add.existing(this);
-
     this.setInteractive();
   }
 
   get isRevealed() {
     return this._isRevealed;
+  }
+
+  public moveTo(x: number, y: number) {
+    return new Promise((resolve) => {
+      this.scene.tweens.add({
+        targets: this,
+        x,
+        y,
+        duration: 50,
+        onComplete: resolve,
+      });
+    });
   }
 
   public async reveal() {
@@ -58,14 +66,16 @@ export class Card extends GameObjects.Sprite {
 
   public flip() {
     return new Promise((resolve) => {
+      const originalScaleX = this.scaleX;
+      const originalScaleY = this.scaleY;
+
       const show = () => {
-        const texture = this._isRevealed ? 'card' : 'card' + this.id;
-
+        const texture = this._isRevealed ? 'card' : `card${this.id}`;
         this.setTexture(texture);
-
         this.scene.tweens.add({
           targets: this,
-          scaleX: 1,
+          scaleX: originalScaleX,
+          scaleY: originalScaleY,
           ease: 'Linear',
           duration: 200,
           onComplete: resolve,

@@ -77,7 +77,7 @@ export class Card extends GameObjects.Sprite {
           scaleX: originalScaleX,
           scaleY: originalScaleY,
           ease: 'Linear',
-          duration: 200,
+          duration: 100,
           onComplete: resolve,
         });
       };
@@ -86,7 +86,7 @@ export class Card extends GameObjects.Sprite {
         targets: this,
         scaleX: 0,
         ease: 'Linear',
-        duration: 200,
+        duration: 100,
         onComplete: show,
       });
     });

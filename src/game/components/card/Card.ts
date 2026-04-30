@@ -1,5 +1,6 @@
 import {GameObjects} from 'phaser';
 import {TypedScene} from '../../scenes/utils/TypedScene';
+import {AUDIO_KEYS} from '../../../configs/audio_assets';
 
 type CardId = '1' | '2' | '3' | '4' | '5';
 
@@ -15,13 +16,16 @@ interface CardProps {
 
 export class Card extends GameObjects.Sprite {
   public readonly id: CardId;
+
   private _isRevealed: boolean = false;
+  private _scene: TypedScene;
 
   constructor(scene: TypedScene, props: CardProps) {
     const {id, position} = props;
     super(scene, position.x, position.y, 'card');
     this.id = id;
-    scene.add.existing(this);
+    this._scene = scene;
+    this._scene.add.existing(this);
     this.setInteractive();
   }
 
@@ -42,6 +46,7 @@ export class Card extends GameObjects.Sprite {
   }
 
   public async reveal() {
+    this._scene.sound.play(AUDIO_KEYS.CARD_FLIP, {volume: 0.25});
     await this.flip();
     this._isRevealed = true;
   }

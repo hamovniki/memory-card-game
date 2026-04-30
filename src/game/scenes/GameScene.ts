@@ -1,3 +1,4 @@
+import {AUDIO_KEYS} from '../../configs/audio_assets';
 import {Card} from '../components/card/Card';
 import {CardDealer} from '../components/card_dealer/CardDealer';
 import {Timer} from '../components/Timer';
@@ -64,11 +65,13 @@ export class GameScene extends TypedScene {
   }
 
   private _onTimeIsOver = () => {
+    this.sound.play(AUDIO_KEYS.LOSE);
     this._menuDOM.render({type: 'end', isWin: false});
     this._isGameOver = true;
   };
 
   private _onAllCardsRevealed = () => {
+    this.sound.play(AUDIO_KEYS.WIN);
     this._menuDOM.render({type: 'end', isWin: true});
     this._timer.stop();
     this._isGameOver = true;

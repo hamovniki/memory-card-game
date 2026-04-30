@@ -1,3 +1,4 @@
+import {AUDIO_ASSETS} from '../../configs/audio_assets';
 import {IMAGE_ASSETS} from '../../configs/image_assets';
 import {TypedScene} from './utils/TypedScene';
 
@@ -36,6 +37,9 @@ export class Preloader extends TypedScene {
     this.load.setPath('assets');
     IMAGE_ASSETS.forEach((asset) =>
       this.load.image(asset.assetKey, asset.path),
+    );
+    AUDIO_ASSETS.forEach((audio) =>
+      this.load.audio(audio.assetKey, audio.path),
     );
   }
 

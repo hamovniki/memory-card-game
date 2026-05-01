@@ -1,8 +1,9 @@
 import {GameObjects} from 'phaser';
 import {TypedScene} from '../../scenes/utils/TypedScene';
 import {AUDIO_KEYS} from '../../../configs/audio_assets';
-
-type CardId = '1' | '2' | '3' | '4' | '5';
+import {CARD_KEYS} from '../../../configs/image_assets';
+type Cards = (typeof CARD_KEYS)[keyof typeof CARD_KEYS];
+type CardId = Exclude<Cards, 'card-back'>;
 
 export type CardPosition = {
   x: number;
@@ -22,7 +23,7 @@ export class Card extends GameObjects.Sprite {
 
   constructor(scene: TypedScene, props: CardProps) {
     const {id, position} = props;
-    super(scene, position.x, position.y, 'card');
+    super(scene, position.x, position.y, CARD_KEYS.CARD_BACK);
     this.id = id;
     this._scene = scene;
     this._scene.add.existing(this);
@@ -77,7 +78,7 @@ export class Card extends GameObjects.Sprite {
       const originalScaleY = this.scaleY;
 
       const show = () => {
-        const texture = this._isRevealed ? 'card' : `card${this.id}`;
+        const texture = this._isRevealed ? CARD_KEYS.CARD_BACK : this.id;
         this.setTexture(texture);
         this.scene.tweens.add({
           targets: this,

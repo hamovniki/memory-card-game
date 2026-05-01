@@ -1,13 +1,20 @@
 import {Utils} from 'phaser';
 import {TypedScene} from '../../scenes/utils/TypedScene';
 import {Card, CardPosition} from '../card/Card';
+import {CARD_KEYS} from '../../../configs/image_assets';
 
 export class CardDealer {
   private _scene: TypedScene;
   private _cards: Card[] = [];
   private _prevRevealedCard: Card | null = null;
   private _guessesParis = 0;
-  private _possibleCardIds: Card['id'][] = ['1', '2', '3', '4', '5'];
+  private _possibleCardIds: Card['id'][] = [
+    'joker_black',
+    'joker_red',
+    '2_of_clubs',
+    '2_of_diamonds',
+    '10_of_spades',
+  ];
   private _processing = false;
   private _currentScale = 1;
 
@@ -86,7 +93,9 @@ export class CardDealer {
 
   private _getGridParameters() {
     const {width, height} = this._scene.cameras.main;
-    const originalTexture = this._scene.textures.get('card').getSourceImage();
+    const originalTexture = this._scene.textures
+      .get(CARD_KEYS.CARD_BACK)
+      .getSourceImage();
     const originalCardWidth = originalTexture.width;
     const originalCardHeight = originalTexture.height;
 

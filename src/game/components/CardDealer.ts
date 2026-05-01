@@ -1,7 +1,7 @@
 import {Utils} from 'phaser';
-import {TypedScene} from '../../scenes/utils/TypedScene';
-import {Card, CardPosition} from '../card/Card';
-import {CARD_KEYS} from '../../../configs/image_assets';
+import {TypedScene} from '../scenes/utils/TypedScene';
+import {Card, CardPosition} from './Card';
+import {CARD_KEYS} from '../../configs/image_assets';
 
 export class CardDealer {
   private _scene: TypedScene;

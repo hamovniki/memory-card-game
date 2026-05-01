@@ -1,7 +1,7 @@
 import {GameObjects} from 'phaser';
-import {TypedScene} from '../../scenes/utils/TypedScene';
-import {AUDIO_KEYS} from '../../../configs/audio_assets';
-import {CARD_KEYS} from '../../../configs/image_assets';
+import {TypedScene} from '../scenes/utils/TypedScene';
+import {AUDIO_KEYS} from '../../configs/audio_assets';
+import {CARD_KEYS} from '../../configs/image_assets';
 type Cards = (typeof CARD_KEYS)[keyof typeof CARD_KEYS];
 type CardId = Exclude<Cards, 'card-back'>;
 

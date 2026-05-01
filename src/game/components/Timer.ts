@@ -23,9 +23,11 @@ export class Timer {
     this._time = maxTime;
 
     this._createText();
+    this._text.setVisible(false);
   }
 
   public start() {
+    this._text.setVisible(true);
     this._scene.time.paused = false;
     this._scene.time.addEvent({
       delay: 1000,

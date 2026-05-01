@@ -44,7 +44,7 @@ export class Preloader extends TypedScene {
   }
 
   create() {
-    this.scene.start('GameScene', {isRestart: true});
+    this.scene.start('GameScene', {isRestart: false});
     this.sound.play(AUDIO_KEYS.MAIN_LOOP, {volume: 0.1, loop: true});
   }
 }

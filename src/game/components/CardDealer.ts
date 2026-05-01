@@ -1,25 +1,21 @@
-import {Utils} from 'phaser';
 import {TypedScene} from '../scenes/utils/TypedScene';
 import {Card, CardPosition} from './Card';
 import {CARD_KEYS} from '../../configs/image_assets';
+import {generateRandomCardSet} from '../utils/card_set_generator';
 
 export class CardDealer {
   private _scene: TypedScene;
   private _cards: Card[] = [];
   private _prevRevealedCard: Card | null = null;
   private _guessesParis = 0;
-  private _possibleCardIds: Card['id'][] = [
-    'joker_black',
-    'joker_red',
-    '2_of_clubs',
-    '2_of_diamonds',
-    '10_of_spades',
-  ];
   private _processing = false;
   private _currentScale = 1;
 
-  constructor(scene: TypedScene) {
+  private _pairsCount: number;
+
+  constructor(scene: TypedScene, pairsCount: number = 5) {
     this._scene = scene;
+    this._pairsCount = pairsCount;
   }
 
   public async revealCard(card: Card) {
@@ -46,7 +42,7 @@ export class CardDealer {
       this._processing = false;
     }
 
-    if (this._guessesParis === this._possibleCardIds.length) {
+    if (this._guessesParis === this._pairsCount) {
       this.onAllCardsRevealed();
     }
   }
@@ -57,11 +53,7 @@ export class CardDealer {
     this._cards.forEach((card) => card.destroy());
     this._cards = [];
 
-    const allCardsIds = Utils.Array.Shuffle([
-      ...this._possibleCardIds,
-      ...this._possibleCardIds,
-    ]);
-
+    const allCardsIds = generateRandomCardSet(this._pairsCount);
     const {positions, scale} = this._getGridParameters();
     this._currentScale = scale;
 

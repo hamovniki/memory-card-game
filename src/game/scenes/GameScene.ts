@@ -2,6 +2,7 @@ import {AUDIO_KEYS} from '../../configs/audio_assets';
 import {Card} from '../components/Card';
 import {CardDealer} from '../components/CardDealer';
 import {Timer} from '../components/Timer';
+import {gameManager} from '../manager/GameManager';
 import {MemoDOM} from '../ui/MemoDOM';
 import {TypedScene} from './utils/TypedScene';
 
@@ -33,16 +34,18 @@ export class GameScene extends TypedScene {
   }
 
   async create({isRestart}: SceneCreateProps) {
+    const {pairsCount, maxTime} =
+      gameManager.difficultyManager.getCurrentDifficulty();
     const {width} = this.cameras.main;
     this._isGameOver = false;
-    this._cardDealer = new CardDealer(this);
+    this._cardDealer = new CardDealer(this, pairsCount);
 
     this._menuDOM = new MemoDOM();
 
     this._timer = new Timer(this, {
       x: width / 2,
       y: 15,
-      maxTime: 20,
+      maxTime,
     });
 
     isRestart ? this._onStartGame() : this._menuDOM.render({type: 'start'});

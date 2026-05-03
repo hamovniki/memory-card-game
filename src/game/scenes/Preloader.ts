@@ -14,8 +14,9 @@ export class Preloader extends TypedScene {
 
     const bg = this.add.image(centerX, centerY, 'bg');
     bg.setDisplaySize(width, height);
-
-    const barWidth = 468;
+    const deskBarWidth = 468;
+    const mobileBarWidth = width / 2;
+    const barWidth = width > 494 ? deskBarWidth : mobileBarWidth;
     const barHeight = 32;
     this.add
       .rectangle(centerX, centerY, barWidth, barHeight)

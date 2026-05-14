@@ -1,5 +1,6 @@
 import {BaseDOM} from '../BaseDOM';
 import {MENU_RESTART_TEMPLATE} from './menu-restart-template';
+import './menu-restart.css';
 
 class MenuRestartDOM extends BaseDOM {
   public onRestartGame: () => void;

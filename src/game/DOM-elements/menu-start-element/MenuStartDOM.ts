@@ -1,5 +1,6 @@
 import {BaseDOM} from '../BaseDOM';
 import {MENU_START_TEMPLATE} from './menu-start-template';
+import './menu-start.css';
 
 class MenuStartDOM extends BaseDOM {
   public onStartGame: () => void;

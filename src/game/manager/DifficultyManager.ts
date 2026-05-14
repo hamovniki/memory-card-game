@@ -7,7 +7,7 @@ interface DifficultyParams {
 
 interface DifficultyLevels extends Record<Difficulty, DifficultyParams> {}
 
-const BASE_DIFFICULTY: Difficulty = 'easy';
+const BASE_DIFFICULTY: Difficulty = 'medium';
 
 export class DifficultyManager {
   private _difficultyLevels: DifficultyLevels;
@@ -49,7 +49,7 @@ export class DifficultyManager {
     };
 
     const hard: DifficultyParams = {
-      maxTime: 30,
+      maxTime: 60,
       pairsCount: 12,
     };
 

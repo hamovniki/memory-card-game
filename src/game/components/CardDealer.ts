@@ -85,22 +85,30 @@ export class CardDealer {
 
   private _getGridParameters() {
     const {width, height} = this._scene.cameras.main;
+    const totalCards = this._pairsCount * 2;
+
     const originalTexture = this._scene.textures
       .get(CARD_KEYS.CARD_BACK)
       .getSourceImage();
     const originalCardWidth = originalTexture.width;
     const originalCardHeight = originalTexture.height;
 
-    const isPortrait = width < height;
-    const cols = isPortrait ? 2 : 5;
-    const rows = isPortrait ? 5 : 2;
+    let cols = Math.floor(Math.sqrt(totalCards * (width / height)));
+    cols = Math.min(6, Math.max(2, cols));
+    let rows = Math.ceil(totalCards / cols);
+
+    const maxRows = 6;
+    if (rows > maxRows) {
+      cols = Math.ceil(totalCards / maxRows);
+      rows = maxRows;
+    }
 
     const horizontalPadding = 16;
     const verticalPadding = 16;
     const cardMargin = 4;
 
     const availableWidth = width - horizontalPadding * 2;
-    const availableHeight = height - verticalPadding * 6;
+    const availableHeight = height - verticalPadding * 2;
 
     const neededCardWidth = (availableWidth - (cols - 1) * cardMargin) / cols;
     const neededCardHeight = (availableHeight - (rows - 1) * cardMargin) / rows;
@@ -118,8 +126,8 @@ export class CardDealer {
     const startY = (height - totalGridHeight) / 2 + cardHeight / 2;
 
     const positions: CardPosition[] = [];
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
+    for (let row = 0; row < rows && positions.length < totalCards; row++) {
+      for (let col = 0; col < cols && positions.length < totalCards; col++) {
         const x = startX + col * (cardWidth + cardMargin);
         const y = startY + row * (cardHeight + cardMargin);
         positions.push({x, y});

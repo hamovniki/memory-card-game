@@ -27,7 +27,7 @@ class MenuSettingsDOM extends BaseDOM {
   }
 
   public runAction(): void {
-    this._setupBackButton();
+    //
   }
 
   private _setupBackButton(): void {

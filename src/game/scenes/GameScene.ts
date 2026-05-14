@@ -23,19 +23,9 @@ export class GameScene extends TypedScene {
   }
 
   async create({isRestart}: SceneCreateProps) {
-    const {pairsCount, maxTime} =
-      gameManager.difficultyManager.getCurrentDifficulty();
-    const {width} = this.cameras.main;
     this._isGameOver = false;
-    this._cardDealer = new CardDealer(this, pairsCount);
 
     isRestart ? menuStartDOM.hide() : menuStartDOM.show();
-
-    this._timer = new Timer(this, {
-      x: width / 2,
-      y: 15,
-      maxTime,
-    });
 
     isRestart ? this._onStartGame() : menuStartDOM.runAction();
 
@@ -50,17 +40,34 @@ export class GameScene extends TypedScene {
   };
 
   private _initEvents() {
-    menuStartDOM.onStartGame = this._onStartGame;
+    menuStartDOM.onStartGame = () => this.scene.restart({isRestart: true});
     menuRestartDOM.onRestartGame = this._onRestartGame;
-    this._cardDealer.onAllCardsRevealed = this._onAllCardsRevealed;
-    this._timer.onTimeIsOver = this._onTimeIsOver;
   }
 
   private _onStartGame = async () => {
+    this._setSettings();
+
     await this._cardDealer.createCards();
     this._timer.start();
     this.input.on('gameobjectdown', this._onCardClick);
   };
+
+  private _setSettings() {
+    const {pairsCount, maxTime} =
+      gameManager.difficultyManager.getCurrentDifficulty();
+    const {width} = this.cameras.main;
+
+    this._cardDealer = new CardDealer(this, pairsCount);
+
+    this._timer = new Timer(this, {
+      x: width / 2,
+      y: 15,
+      maxTime,
+    });
+
+    this._cardDealer.onAllCardsRevealed = this._onAllCardsRevealed;
+    this._timer.onTimeIsOver = this._onTimeIsOver;
+  }
 
   private _onRestartGame = async () => {
     this.scene.restart({isRestart: true});
@@ -70,6 +77,7 @@ export class GameScene extends TypedScene {
     this.sound.play(AUDIO_KEYS.LOSE);
     menuRestartDOM.show(false);
     this._isGameOver = true;
+    this._timer.stop();
   };
 
   private _onAllCardsRevealed = () => {

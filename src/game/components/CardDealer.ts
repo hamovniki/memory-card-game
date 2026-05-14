@@ -104,7 +104,7 @@ export class CardDealer {
     }
 
     const horizontalPadding = 16;
-    const verticalPadding = 16;
+    const verticalPadding = 48;
     const cardMargin = 4;
 
     const availableWidth = width - horizontalPadding * 2;

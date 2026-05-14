@@ -1,6 +1,6 @@
-.menu-start {
+.menu-settings {
   position: absolute;
-  height: 10rem;
+  height: 10.5rem;
   max-width: 15rem;
   width: 100%;
   left: 50%;
@@ -16,11 +16,11 @@
   background-color: rgb(25, 0, 255);
 }
 
-.menu-start-title {
+.menu-settings-title {
   font-weight: bold;
 }
 
-.menu-start-button {
+.back-to-menu-button {
   margin-top: 1rem;
   width: 10rem;
   height: 2rem;

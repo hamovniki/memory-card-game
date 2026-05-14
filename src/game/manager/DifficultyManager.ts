@@ -1,4 +1,4 @@
-type Difficulty = 'easy' | 'medium' | 'hard';
+export type Difficulty = 'easy' | 'medium' | 'hard';
 
 interface DifficultyParams {
   maxTime: number;

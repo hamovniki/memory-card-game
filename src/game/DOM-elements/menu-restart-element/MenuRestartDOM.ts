@@ -1,4 +1,5 @@
 import {BaseDOM} from '../BaseDOM';
+import {menuSettingsDOM} from '../menu-settings-element/MenuSettingsDOM';
 import {MENU_RESTART_TEMPLATE} from './menu-restart-template';
 import './menu-restart.css';
 
@@ -7,6 +8,7 @@ class MenuRestartDOM extends BaseDOM {
 
   constructor(template: string) {
     super(template);
+    this._goToSettings();
   }
 
   public get elementDOM() {
@@ -46,6 +48,17 @@ class MenuRestartDOM extends BaseDOM {
   private _setLoseParams() {
     this.elementDOM.style.backgroundColor = 'red';
     this.titleDOM.innerText = 'ПОРАЖЕНИЕ';
+  }
+
+  private _goToSettings(): void {
+    const button = this.elementDOM.querySelector(
+      '.menu-start-to-settings-button',
+    ) as HTMLButtonElement;
+
+    button.onclick = () => {
+      this.hide();
+      menuSettingsDOM.show();
+    };
   }
 }
 

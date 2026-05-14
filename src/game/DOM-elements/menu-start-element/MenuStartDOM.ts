@@ -1,4 +1,5 @@
 import {BaseDOM} from '../BaseDOM';
+import {menuSettingsDOM} from '../menu-settings-element/MenuSettingsDOM';
 import {MENU_START_TEMPLATE} from './menu-start-template';
 import './menu-start.css';
 
@@ -7,6 +8,7 @@ class MenuStartDOM extends BaseDOM {
 
   constructor(template: string) {
     super(template);
+    this._goToSettings();
   }
 
   public get elementDOM() {
@@ -29,6 +31,17 @@ class MenuStartDOM extends BaseDOM {
     button.onclick = () => {
       this.hide();
       this.onStartGame();
+    };
+  }
+
+  private _goToSettings(): void {
+    const button = this.elementDOM.querySelector(
+      '.menu-start-to-settings-button',
+    ) as HTMLButtonElement;
+
+    button.onclick = () => {
+      this.hide();
+      menuSettingsDOM.show();
     };
   }
 }

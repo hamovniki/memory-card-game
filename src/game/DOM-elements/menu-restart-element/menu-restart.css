@@ -1,4 +1,4 @@
-.menu {
+.menu-restart {
   position: absolute;
   height: 10rem;
   max-width: 15rem;
@@ -15,7 +15,11 @@
   transform: translateX(-50%);
 }
 
-.menu button {
+.menu-restart-title {
+  font-weight: bold;
+}
+
+.menu-restart-button {
   margin-top: 1rem;
   width: 10rem;
   height: 2rem;
@@ -24,8 +28,4 @@
   border-radius: 0.5rem;
   font-weight: bold;
   border: none;
-}
-
-.menu span {
-  font-weight: bold;
 }

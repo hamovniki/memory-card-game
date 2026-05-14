@@ -1,3 +1,6 @@
+@import url(../src/game/DOM-elements/menu-start-element/menu-start.css);
+@import url(../src/game/DOM-elements/menu-restart-element/menu-restart.css);
+
 body {
   margin: 0;
   padding: 0;

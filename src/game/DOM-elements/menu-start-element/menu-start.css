@@ -1,0 +1,31 @@
+.menu-start {
+  position: absolute;
+  height: 10rem;
+  max-width: 15rem;
+  width: 100%;
+  left: 50%;
+  top: 35%;
+
+  padding: 1rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transform: translateX(-50%);
+}
+
+.menu-start-title {
+  font-weight: bold;
+}
+
+.menu-start-button {
+  margin-top: 1rem;
+  width: 10rem;
+  height: 2rem;
+  cursor: pointer;
+  background: white;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  border: none;
+}

@@ -3,7 +3,8 @@ import {Card} from '../components/Card';
 import {CardDealer} from '../components/CardDealer';
 import {Timer} from '../components/Timer';
 import {gameManager} from '../manager/GameManager';
-import {MemoDOM} from '../ui/MemoDOM';
+import {menuRestartDOM} from '../DOM-elements/menu-restart-element/MenuRestartDOM';
+import {menuStartDOM} from '../DOM-elements/menu-start-element/MenuStartDOM';
 import {TypedScene} from './utils/TypedScene';
 
 type SceneCreateProps = {
@@ -13,21 +14,9 @@ type SceneCreateProps = {
 export class GameScene extends TypedScene {
   private _cardDealer: CardDealer;
 
-  private _menuDOM: MemoDOM;
-
   private _timer: Timer;
 
   private _isGameOver: boolean;
-
-  private _onStartGame = async () => {
-    await this._cardDealer.createCards();
-    this._timer.start();
-    this.input.on('gameobjectdown', this._onCardClick);
-  };
-
-  private _onRestartGame = async () => {
-    this.scene.restart({isRestart: true});
-  };
 
   constructor() {
     super('GameScene');
@@ -40,7 +29,7 @@ export class GameScene extends TypedScene {
     this._isGameOver = false;
     this._cardDealer = new CardDealer(this, pairsCount);
 
-    this._menuDOM = new MemoDOM();
+    isRestart ? menuStartDOM.hide() : menuStartDOM.show();
 
     this._timer = new Timer(this, {
       x: width / 2,
@@ -48,7 +37,7 @@ export class GameScene extends TypedScene {
       maxTime,
     });
 
-    isRestart ? this._onStartGame() : this._menuDOM.render({type: 'start'});
+    isRestart ? this._onStartGame() : menuStartDOM.runAction();
 
     this._initEvents();
 
@@ -61,21 +50,31 @@ export class GameScene extends TypedScene {
   };
 
   private _initEvents() {
-    this._menuDOM.onStartGame = this._onStartGame;
-    this._menuDOM.onRestartGame = this._onRestartGame;
+    menuStartDOM.onStartGame = this._onStartGame;
+    menuRestartDOM.onRestartGame = this._onRestartGame;
     this._cardDealer.onAllCardsRevealed = this._onAllCardsRevealed;
     this._timer.onTimeIsOver = this._onTimeIsOver;
   }
 
+  private _onStartGame = async () => {
+    await this._cardDealer.createCards();
+    this._timer.start();
+    this.input.on('gameobjectdown', this._onCardClick);
+  };
+
+  private _onRestartGame = async () => {
+    this.scene.restart({isRestart: true});
+  };
+
   private _onTimeIsOver = () => {
     this.sound.play(AUDIO_KEYS.LOSE);
-    this._menuDOM.render({type: 'end', isWin: false});
+    menuRestartDOM.show(false);
     this._isGameOver = true;
   };
 
   private _onAllCardsRevealed = () => {
     this.sound.play(AUDIO_KEYS.WIN);
-    this._menuDOM.render({type: 'end', isWin: true});
+    menuRestartDOM.show(true);
     this._timer.stop();
     this._isGameOver = true;
   };

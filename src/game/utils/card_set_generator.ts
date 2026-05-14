@@ -19,6 +19,5 @@ export const generateRandomCardSet = (pairsCount: number): CardId[] => {
   const selected = shuffledAll.slice(0, pairsCount);
 
   const pairs = Utils.Array.Shuffle([...selected, ...selected]);
-  console.log(pairs);
   return pairs;
 };

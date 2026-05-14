@@ -10,7 +10,7 @@ class MenuSettingsDOM extends BaseDOM {
 
   constructor(template: string) {
     super(template);
-    this._setupBackButton();
+    this._backToMenu();
   }
 
   public get elementDOM() {
@@ -30,7 +30,7 @@ class MenuSettingsDOM extends BaseDOM {
     //
   }
 
-  private _setupBackButton(): void {
+  private _backToMenu(): void {
     const button = this.elementDOM.querySelector(
       '.back-to-menu-button',
     ) as HTMLButtonElement;

@@ -28,7 +28,6 @@ class MenuRestartDOM extends BaseDOM {
       this.setText('.menu-restart-title', 'ПОРАЖЕНИЕ');
       this.setStyle('.menu-restart', 'backgroundColor', 'red');
     }
-    console.log('WIN');
     super.show();
   }
 }

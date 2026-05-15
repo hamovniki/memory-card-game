@@ -6,6 +6,7 @@ import {gameManager} from '../manager/GameManager';
 import {menuRestartDOM} from '../DOM-elements/menu-restart-element/MenuRestartDOM';
 import {menuStartDOM} from '../DOM-elements/menu-start-element/MenuStartDOM';
 import {TypedScene} from './utils/TypedScene';
+import {menuSettingsDOM} from '../DOM-elements/menu-settings-element/MenuSettingsDOM';
 
 type SceneCreateProps = {
   isRestart?: boolean;
@@ -25,9 +26,12 @@ export class GameScene extends TypedScene {
   async create({isRestart}: SceneCreateProps) {
     this._isGameOver = false;
 
-    isRestart ? menuStartDOM.hide() : menuStartDOM.show();
-
-    isRestart ? this._onStartGame() : menuStartDOM.runAction();
+    if (isRestart) {
+      menuStartDOM.hide();
+      this._onStartGame();
+    } else {
+      menuStartDOM.show();
+    }
 
     this._initEvents();
 
@@ -42,6 +46,27 @@ export class GameScene extends TypedScene {
   private _initEvents() {
     menuStartDOM.onStartGame = () => this.scene.restart({isRestart: true});
     menuRestartDOM.onRestartGame = this._onRestartGame;
+    menuStartDOM.onOpenSettings = () => {
+      menuSettingsDOM.setCurrentDifficulty(
+        gameManager.difficultyManager.currentDifficulty,
+      );
+      menuSettingsDOM.show();
+    };
+
+    menuRestartDOM.onOpenSettings = () => {
+      menuSettingsDOM.setCurrentDifficulty(
+        gameManager.difficultyManager.currentDifficulty,
+      );
+      menuSettingsDOM.show();
+    };
+
+    menuSettingsDOM.onBackToMenu = () => {
+      menuStartDOM.show();
+      const newDifficulty = menuSettingsDOM.getCurrentDifficulty();
+      if (newDifficulty) {
+        gameManager.difficultyManager.changeDifficulty(newDifficulty);
+      }
+    };
   }
 
   private _onStartGame = async () => {

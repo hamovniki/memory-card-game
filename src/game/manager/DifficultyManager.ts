@@ -1,3 +1,5 @@
+import {LocalStorageManager} from './local-storage-manager/LocalStorageManager';
+
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
 interface DifficultyParams {
@@ -12,32 +14,38 @@ const BASE_DIFFICULTY: Difficulty = 'easy';
 export class DifficultyManager {
   private _difficultyLevels: DifficultyLevels;
 
-  private _currentDifficulty: Difficulty;
+  private _current: Difficulty;
 
-  constructor() {
-    this._difficultyLevels = this._createDifficultyLevels();
+  private _storage: LocalStorageManager;
 
-    this._currentDifficulty = BASE_DIFFICULTY;
+  constructor(storage: LocalStorageManager) {
+    this._difficultyLevels = this._createLevels();
+
+    this._storage = storage;
+
+    const saved = this._storage.getDifficulty();
+
+    this._current = saved ?? BASE_DIFFICULTY;
   }
 
   get currentDifficulty() {
-    return this._currentDifficulty;
+    return this._current;
   }
 
   public getCurrentDifficulty() {
-    const difficulty = this._difficultyLevels[this._currentDifficulty];
+    const difficulty = this._difficultyLevels[this._current];
     return difficulty;
   }
 
-  public changeDifficulty(value: Difficulty) {
+  public changeCurrentDifficulty(value: Difficulty) {
     const newDifficulty = this._difficultyLevels[value];
 
-    this._currentDifficulty = value;
-
+    this._current = value;
+    this._storage.setDifficulty(value);
     return newDifficulty;
   }
 
-  private _createDifficultyLevels(): DifficultyLevels {
+  private _createLevels(): DifficultyLevels {
     const easy: DifficultyParams = {
       maxTime: 60,
       pairsCount: 5,

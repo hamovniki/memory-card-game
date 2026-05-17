@@ -55,7 +55,7 @@ export class GameScene extends TypedScene implements GameSceneView {
       menuStartDOM.show();
       const newDifficulty = menuSettingsDOM.getCurrentDifficulty();
       if (newDifficulty) {
-        gameManager.difficultyManager.changeDifficulty(newDifficulty);
+        gameManager.difficultyManager.changeCurrentDifficulty(newDifficulty);
       }
     };
   }

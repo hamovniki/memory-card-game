@@ -1,11 +1,16 @@
+import {EventsManager} from '../manager/EventsManager';
+import {gameManager} from '../manager/GameManager';
+
 export abstract class BaseDOM {
   protected element: HTMLElement;
+  protected readonly events: EventsManager;
 
-  constructor(template: string) {
+  constructor(template: string, events: EventsManager = gameManager.events) {
     const wrapper = document.getElementById('menu-wrapper') as HTMLElement;
     wrapper.insertAdjacentHTML('beforeend', template);
 
     this.element = wrapper.lastElementChild as HTMLElement;
+    this.events = events;
   }
 
   public show(): void {

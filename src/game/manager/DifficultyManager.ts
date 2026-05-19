@@ -47,18 +47,18 @@ export class DifficultyManager {
 
   private _createLevels(): DifficultyLevels {
     const easy: DifficultyParams = {
-      maxTime: 60,
-      pairsCount: 5,
+      maxTime: 10,
+      pairsCount: 1,
     };
 
     const medium: DifficultyParams = {
-      maxTime: 45,
-      pairsCount: 8,
+      maxTime: 10,
+      pairsCount: 2,
     };
 
     const hard: DifficultyParams = {
-      maxTime: 60,
-      pairsCount: 12,
+      maxTime: 10,
+      pairsCount: 3,
     };
 
     const levels: DifficultyLevels = {

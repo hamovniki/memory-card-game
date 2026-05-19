@@ -3,6 +3,7 @@ import {Preloader} from './scenes/Preloader';
 import {GameScene} from './scenes/GameScene';
 import {GAME_CONFIG} from '../configs/game_config';
 import {Boot} from './scenes/Boot';
+import {DOMEventsMediator} from './DOM-elements/DOMEventsMediator';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: AUTO,
@@ -20,5 +21,6 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 export const StartGame = (parent: string) => {
+  new DOMEventsMediator();
   return new Game({...config, parent});
 };

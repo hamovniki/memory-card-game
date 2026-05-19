@@ -3,20 +3,17 @@ import {MENU_RESTART_TEMPLATE} from './menu-restart-template';
 import './menu-restart.css';
 
 class MenuRestartDOM extends BaseDOM {
-  public onRestartGame: () => void = () => {};
-  public onOpenSettings: () => void = () => {};
-
   constructor() {
     super(MENU_RESTART_TEMPLATE);
     this.hide();
     this.bindButton('.menu-restart-button', () => {
       this.hide();
-      this.onRestartGame();
+      this.events.emit(this.events.GAME_RESTART_REQUEST);
     });
 
     this.bindButton('.menu-start-to-settings-button', () => {
       this.hide();
-      this.onOpenSettings();
+      this.events.emit(this.events.OPEN_SETTINGS);
     });
   }
 

@@ -4,15 +4,14 @@ import {MENU_SETTINGS_TEMPLATE} from './menu-settings-template';
 import './menu-settings.css';
 
 class MenuSettingsDOM extends BaseDOM {
-  public onBackToMenu: () => void = () => {};
-
   constructor() {
     super(MENU_SETTINGS_TEMPLATE);
     this.hide();
 
     this.bindButton('.back-to-menu-button', () => {
       this.hide();
-      this.onBackToMenu();
+
+      this.events.emit(this.events.BACK_TO_MENU);
     });
   }
 

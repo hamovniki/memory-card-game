@@ -1,4 +1,5 @@
 import {gameManager} from '../manager/GameManager';
+import {menuRestartDOM} from './menu-restart-element/MenuRestartDOM';
 import {menuSettingsDOM} from './menu-settings-element/MenuSettingsDOM';
 import {menuStartDOM} from './menu-start-element/MenuStartDOM';
 
@@ -9,10 +10,6 @@ export class DOMEventsMediator {
 
   private _setupListeners() {
     gameManager.events.on(gameManager.events.GAME_START_REQUEST, () => {
-      menuStartDOM.hide();
-    });
-
-    gameManager.events.on(gameManager.events.GAME_RESTART_REQUEST, () => {
       menuStartDOM.hide();
     });
 
@@ -33,6 +30,14 @@ export class DOMEventsMediator {
 
     gameManager.events.on(gameManager.events.GAME_PRELOAD, () => {
       menuStartDOM.show();
+    });
+
+    gameManager.events.on(gameManager.events.GAME_OVER_WIN, () => {
+      menuRestartDOM.show(true);
+    });
+
+    gameManager.events.on(gameManager.events.GAME_OVER_LOSE, () => {
+      menuRestartDOM.show(false);
     });
   }
 }

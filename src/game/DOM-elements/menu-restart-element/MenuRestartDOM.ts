@@ -8,7 +8,7 @@ class MenuRestartDOM extends BaseDOM {
     this.hide();
     this.bindButton('.menu-restart-button', () => {
       this.hide();
-      this.events.emit(this.events.GAME_RESTART_REQUEST);
+      this.events.emit(this.events.GAME_START_REQUEST);
     });
 
     this.bindButton('.menu-start-to-settings-button', () => {

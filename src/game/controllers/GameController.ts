@@ -1,7 +1,6 @@
 import {AUDIO_KEYS} from '../../configs/audio_assets';
 import {CardDealer} from '../components/CardDealer';
 import {Timer} from '../components/Timer';
-import {menuRestartDOM} from '../DOM-elements/menu-restart-element/MenuRestartDOM';
 import {gameManager} from '../manager/GameManager';
 
 export interface GameSceneView {
@@ -12,7 +11,6 @@ export interface GameSceneView {
 export class GameController {
   private _cardDealer: CardDealer | null = null;
   private _timer: Timer | null = null;
-  private _isGameOver = false;
   private _view: GameSceneView;
 
   constructor(view: GameSceneView) {
@@ -20,8 +18,6 @@ export class GameController {
   }
 
   public async startNewGame(): Promise<void> {
-    this._isGameOver = false;
-
     const {pairsCount, maxTime} =
       gameManager.difficultyManager.getCurrentDifficulty();
     const scene = this._view as any;
@@ -41,12 +37,8 @@ export class GameController {
   }
 
   public onCardClick(card: any): void {
-    if (this._isGameOver) return;
+    if (!this._timer?.isTimerActive) return;
     this._cardDealer?.revealCard(card);
-  }
-
-  public restartGame(): void {
-    this._isGameOver = false;
   }
 
   public repositionCards(): void {
@@ -58,18 +50,14 @@ export class GameController {
   }
 
   private _handleWin(): void {
-    if (this._isGameOver) return;
-    this._isGameOver = true;
     this._view.playSound(AUDIO_KEYS.WIN);
     this._timer?.stop();
-    menuRestartDOM.show(true);
+    gameManager.events.emit(gameManager.events.GAME_OVER_WIN);
   }
 
   private _handleLose(): void {
-    if (this._isGameOver) return;
-    this._isGameOver = true;
     this._view.playSound(AUDIO_KEYS.LOSE);
     this._timer?.stop();
-    menuRestartDOM.show(false);
+    gameManager.events.emit(gameManager.events.GAME_OVER_LOSE);
   }
 }

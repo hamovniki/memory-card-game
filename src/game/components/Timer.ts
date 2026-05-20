@@ -12,6 +12,7 @@ export class Timer {
   private _text: GameObjects.Text;
   private _position: {x: number; y: number};
   private _time: number;
+  private _isTimerActive: boolean = false;
 
   public onTimeIsOver: () => void;
 
@@ -26,7 +27,12 @@ export class Timer {
     this._text.setVisible(false);
   }
 
+  public get isTimerActive(): boolean {
+    return this._isTimerActive;
+  }
+
   public start() {
+    this._isTimerActive = true;
     this._text.setVisible(true);
     this._scene.time.paused = false;
     this._scene.time.addEvent({
@@ -48,6 +54,7 @@ export class Timer {
   }
 
   public stop() {
+    this._isTimerActive = false;
     this._scene.time.paused = true;
   }
 

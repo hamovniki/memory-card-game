@@ -6,7 +6,6 @@ export class GameScene extends TypedScene implements GameSceneView {
   private _controller: GameController;
 
   private _startHandler: () => void;
-  private _restartHandler: () => void;
 
   constructor() {
     super('GameScene');
@@ -15,18 +14,10 @@ export class GameScene extends TypedScene implements GameSceneView {
     this._startHandler = () => {
       this.scene.restart({isRestart: true});
     };
-    this._restartHandler = () => {
-      this._controller.restartGame();
-      this.scene.restart({isRestart: true});
-    };
 
     gameManager.events.on(
       gameManager.events.GAME_START_REQUEST,
       this._startHandler,
-    );
-    gameManager.events.on(
-      gameManager.events.GAME_RESTART_REQUEST,
-      this._restartHandler,
     );
   }
 

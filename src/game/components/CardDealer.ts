@@ -6,9 +6,6 @@ import {generateRandomCardSet} from '../utils/card_set_generator';
 export class CardDealer {
   private _scene: TypedScene;
   private _cards: Card[] = [];
-  private _prevRevealedCard: Card | null = null;
-  private _guessesParis = 0;
-  private _processing = false;
   private _currentScale = 1;
 
   private _pairsCount: number;
@@ -17,37 +14,6 @@ export class CardDealer {
     this._scene = scene;
     this._pairsCount = pairsCount;
   }
-
-  public async revealCard(card: Card) {
-    if (card.isRevealed || this._processing || this._prevRevealedCard === card)
-      return;
-
-    if (!this._prevRevealedCard) {
-      card.reveal();
-      this._prevRevealedCard = card;
-      return;
-    }
-
-    this._processing = true;
-    await card.reveal();
-
-    if (this._prevRevealedCard.id === card.id) {
-      this._guessesParis++;
-      this._prevRevealedCard = null;
-      this._processing = false;
-    } else {
-      await new Promise<void>((resolve) => setTimeout(resolve, 250));
-      await Promise.all([this._prevRevealedCard.hide(), card.hide()]);
-      this._prevRevealedCard = null;
-      this._processing = false;
-    }
-
-    if (this._guessesParis === this._pairsCount) {
-      this.onAllCardsRevealed();
-    }
-  }
-
-  public onAllCardsRevealed: () => void = () => {};
 
   public async createCards() {
     this._cards.forEach((card) => card.destroy());
@@ -80,6 +46,12 @@ export class CardDealer {
       const card = this._cards[i];
       card.setScale(this._currentScale);
       await card.moveTo(positions[i].x, positions[i].y);
+    }
+  }
+
+  public async revealCard(card: Card) {
+    if (!card.isRevealed) {
+      await card.reveal();
     }
   }
 

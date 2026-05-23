@@ -1,15 +1,20 @@
 import {gameManager} from '../manager/GameManager';
 import {TypedScene} from './utils/TypedScene';
-import {GameController, GameSceneView} from '../controllers/GameController';
+import {GameStateContext} from '../states/game-state/context/GameStateContext';
+
+export interface GameSceneView extends TypedScene {
+  playSound(key: string): void;
+  get sceneWidth(): number;
+}
 
 export class GameScene extends TypedScene implements GameSceneView {
-  private _controller: GameController;
+  private _gameStateContext: GameStateContext;
 
   private _startHandler: () => void;
 
   constructor() {
     super('GameScene');
-    this._controller = new GameController(this);
+    this._gameStateContext = new GameStateContext(this);
 
     this._startHandler = () => {
       this.scene.restart({isRestart: true});
@@ -23,11 +28,11 @@ export class GameScene extends TypedScene implements GameSceneView {
 
   async create({isRestart}: {isRestart?: boolean}) {
     if (isRestart) {
-      await this._controller.startNewGame();
+      await this._gameStateContext.startNewGame();
     }
 
     this.input.on('gameobjectdown', (_pointer: any, card: any) => {
-      this._controller.onCardClick(card);
+      this._gameStateContext.onCardClick(card);
     });
 
     this.scale.on('resize', this._onResize, this);
@@ -42,7 +47,7 @@ export class GameScene extends TypedScene implements GameSceneView {
   }
 
   private _onResize = () => {
-    this._controller.repositionCards();
-    this._controller.updateTimerPosition();
+    this._gameStateContext.repositionCards();
+    this._gameStateContext.updateTimerPosition();
   };
 }

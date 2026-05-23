@@ -46,19 +46,21 @@ export class DifficultyManager {
   }
 
   private _createLevels(): DifficultyLevels {
+    const isDev = import.meta.env.VITE_DEV_DIFFICULTY === 'true';
+
     const easy: DifficultyParams = {
-      maxTime: 1000,
-      pairsCount: 1,
+      maxTime: isDev ? 10 : 60,
+      pairsCount: isDev ? 1 : 5,
     };
 
     const medium: DifficultyParams = {
-      maxTime: 1000,
-      pairsCount: 2,
+      maxTime: isDev ? 10 : 45,
+      pairsCount: isDev ? 2 : 8,
     };
 
     const hard: DifficultyParams = {
-      maxTime: 10,
-      pairsCount: 3,
+      maxTime: isDev ? 10 : 60,
+      pairsCount: isDev ? 3 : 12,
     };
 
     const levels: DifficultyLevels = {

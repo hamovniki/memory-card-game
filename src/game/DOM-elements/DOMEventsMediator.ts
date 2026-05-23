@@ -17,6 +17,7 @@ export class DOMEventsMediator {
       menuSettingsDOM.setCurrentDifficulty(
         gameManager.difficultyManager.currentDifficulty,
       );
+      menuSettingsDOM.updateVolumeSlider();
       menuSettingsDOM.show();
     });
 

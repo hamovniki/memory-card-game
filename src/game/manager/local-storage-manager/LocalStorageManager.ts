@@ -1,8 +1,15 @@
 import {LocalStorageAdapter} from './LocalStorageAdapter';
 type Difficulty = 'easy' | 'medium' | 'hard';
 
+export type SoundSettings = {
+  volume: number;
+  muted: boolean;
+  savedVolume: number;
+};
+
 const LOCAL_STORAGE_KEYS = {
   difficulty: 'difficulty',
+  sound: 'sound',
 } as const;
 
 export class LocalStorageManager {
@@ -12,6 +19,7 @@ export class LocalStorageManager {
     this._storage = new LocalStorageAdapter(userId);
   }
 
+  /** Difficulty */
   public setDifficulty(value: Difficulty) {
     this._storage.setItem(LOCAL_STORAGE_KEYS.difficulty, value);
   }
@@ -23,5 +31,20 @@ export class LocalStorageManager {
 
   public removeDifficulty() {
     this._storage.removeItem(LOCAL_STORAGE_KEYS.difficulty);
+  }
+
+  /** Sound */
+  public setSoundSettings(settings: SoundSettings): void {
+    this._storage.setItem(LOCAL_STORAGE_KEYS.sound, JSON.stringify(settings));
+  }
+
+  public getSoundSettings(): SoundSettings | null {
+    const raw = this._storage.getItem(LOCAL_STORAGE_KEYS.sound);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw) as SoundSettings;
+    } catch {
+      return null;
+    }
   }
 }

@@ -21,6 +21,12 @@ export const MENU_SETTINGS_TEMPLATE = /*html*/ `
             </div>
         </fieldset>
 
+
+          <div class="sound-settings">
+               <label>Громкость:</label>
+               <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+          </div>
+
         <button class='back-to-menu-button'>ВЕРНУТЬСЯ В МЕНЮ</button>
     </div>
     ` as const;

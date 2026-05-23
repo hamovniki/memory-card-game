@@ -1,6 +1,8 @@
 import {gameManager} from '../manager/GameManager';
 import {TypedScene} from './utils/TypedScene';
 import {GameStateContext} from '../states/game-state/context/GameStateContext';
+import {Card} from '../components/Card';
+import {SOUND_KEYS} from '../../configs/sound_image_assets';
 
 export interface GameSceneView extends TypedScene {
   playSound(key: string): void;
@@ -27,11 +29,13 @@ export class GameScene extends TypedScene implements GameSceneView {
   }
 
   async create({isRestart}: {isRestart?: boolean}) {
+    this._createSoundIcon();
     if (isRestart) {
       await this._gameStateContext.startNewGame();
     }
 
-    this.input.on('gameobjectdown', (_pointer: any, card: any) => {
+    this.input.on('gameobjectdown', (_pointer: any, card: Card) => {
+      if (!card.id) return;
       this._gameStateContext.onCardClick(card);
     });
 
@@ -50,4 +54,29 @@ export class GameScene extends TypedScene implements GameSceneView {
     this._gameStateContext.repositionCards();
     this._gameStateContext.updateTimerPosition();
   };
+
+  private _createSoundIcon(): void {
+    const iconX = 40;
+    const iconY = 40;
+    const icon = this.add
+      .image(iconX, iconY, '')
+      .setInteractive()
+      .setScale(0.1)
+      .setDepth(100);
+    icon.on('pointerdown', () => {
+      gameManager.soundManager.toggleMute();
+      this._updateSoundIcon(icon);
+    });
+    this._updateSoundIcon(icon);
+    this.scale.on('resize', () => {
+      icon.setPosition(iconX, iconY);
+    });
+  }
+
+  private _updateSoundIcon(icon: Phaser.GameObjects.Image): void {
+    const muted = gameManager.soundManager.isMuted();
+    icon.setTexture(
+      muted ? SOUND_KEYS.SOUND_OFF_ICON : SOUND_KEYS.SOUND_ON_ICON,
+    );
+  }
 }

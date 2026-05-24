@@ -1,5 +1,6 @@
 import {AUDIO_ASSETS} from '../../configs/audio_assets';
 import {IMAGE_ASSETS} from '../../configs/image_assets';
+import {PAUSE_ASSETS} from '../../configs/pause_assets';
 import {SOUND_ASSETS} from '../../configs/sound_image_assets';
 import {gameManager} from '../manager/GameManager';
 import {TypedScene} from './utils/TypedScene';
@@ -46,6 +47,9 @@ export class Preloader extends TypedScene {
     );
     SOUND_ASSETS.forEach((sound) =>
       this.load.image(sound.assetKey, sound.path),
+    );
+    PAUSE_ASSETS.forEach((asset) =>
+      this.load.image(asset.assetKey, asset.path),
     );
   }
 

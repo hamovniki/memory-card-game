@@ -1,10 +1,12 @@
 import {AUDIO_KEYS} from '../../configs/audio_assets';
 import {LocalStorageManager} from './local-storage-manager/LocalStorageManager';
 
+const DEFAULT_VOLUME = 0.5;
+
 export class SoundManager {
-  private _volume: number = 0.5;
+  private _volume: number = DEFAULT_VOLUME;
   private _muted: boolean = false;
-  private _savedVolume: number = 0.5;
+  private _savedVolume: number = DEFAULT_VOLUME;
   private _soundManager: Phaser.Sound.BaseSoundManager | null = null;
   private _mainLoopSound: Phaser.Sound.BaseSound | null = null;
   private _storage: LocalStorageManager;
